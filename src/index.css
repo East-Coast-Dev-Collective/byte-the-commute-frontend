@@ -1,3 +1,31 @@
+:root {
+  font-family: Arial, sans-serif;
+}
+
 body {
-  background-color: dodgerblue;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  padding: 16px;
+}
+
+.home-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+nav,
+section {
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+h2,
+h3 {
+  margin: 0;
 }
