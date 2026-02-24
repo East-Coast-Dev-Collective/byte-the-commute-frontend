@@ -1,10 +1,7 @@
+import Home from './pages/Home'
 
 const App = () => {
-	return (
-    <>
-      <h1>Are you ready to BYTE your Commute?</h1>
-    </>
-  )
+  return <Home />
 }
 
-export default App;
+export default App
