@@ -15,27 +15,26 @@ const FromToCard = ({ onRouteSubmit }) => {
 
     const payload = { from: from.trim(), to: to.trim() };
 
-    console.log(payload);
-
     setError("");
-
-    if (onRouteSubmit) {
-      onRouteSubmit(payload);
-    }
+    onRouteSubmit(payload);
   };
 
   return (
     <form className="card" onSubmit={handleSubmit}>
-      <label>From</label>
+      <label htmlFor="from">From</label>
       <input
+        id="from"
+        name="from"
         type="text"
         placeholder="Start Location"
         value={from}
         onChange={(e) => setFrom(e.target.value)}
       />
 
-      <label>To</label>
+      <label htmlFor="to">To</label>
       <input
+        id="to"
+        name="to"
         type="text"
         placeholder="Destination"
         value={to}
