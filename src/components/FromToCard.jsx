@@ -1,21 +1,21 @@
 import { useState } from "react";
 
-const FromToCard = ({ onRouteSubmit }) => {
+const FromToCard = ({ onRouteSubmit, isLoading = false, error = "" }) => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [error, setError] = useState("");
+  const [validationError, setValidationError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!from.trim() || !to.trim()) {
-      setError("Please enter both starting location and destination.");
+      setValidationError("Please enter both starting location and destination.");
       return;
     }
 
     const payload = { from: from.trim(), to: to.trim() };
 
-    setError("");
+    setValidationError("");
     onRouteSubmit(payload);
   };
 
@@ -28,6 +28,7 @@ const FromToCard = ({ onRouteSubmit }) => {
         type="text"
         placeholder="Start Location"
         value={from}
+        disabled={isLoading}
         onChange={(e) => setFrom(e.target.value)}
       />
 
@@ -38,13 +39,15 @@ const FromToCard = ({ onRouteSubmit }) => {
         type="text"
         placeholder="Destination"
         value={to}
+        disabled={isLoading}
         onChange={(e) => setTo(e.target.value)}
       />
 
-      {error && <p className="error-text">{error}</p>}
+      {validationError && <p className="error-text">{validationError}</p>}
+      {!validationError && error && <p className="error-text">{error}</p>}
 
-      <button className="primary-btn" type="submit">
-        Search Route
+      <button className="primary-btn" type="submit" disabled={isLoading}>
+        {isLoading ? "Searching..." : "Search Route"}
       </button>
     </form>
   );
