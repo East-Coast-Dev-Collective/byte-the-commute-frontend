@@ -97,3 +97,29 @@ h3 {
   transform: scale(1.05);
   background: rgba(255, 255, 255, 0.5);
 }
+
+.mode-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block: 0.75rem;
+}
+
+.mode-btn {
+  padding: 0.5rem 0.75rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 999rem;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+.mode-btn.active {
+  border-color: #111;
+  font-weight: 600;
+}
+
+.mode-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

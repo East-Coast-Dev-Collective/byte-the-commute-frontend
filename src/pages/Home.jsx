@@ -10,12 +10,12 @@ const Home = () => {
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [routeError, setRouteError] = useState("");
 
-  const handleRouteSubmit = async ({ from, to }) => {
+  const handleRouteSubmit = async ({ from, to, mode }) => {
     setIsLoadingRoute(true);
     setRouteError("");
 
     try {
-      const route = await fetchRoute({ from, to });
+      const route = await fetchRoute({ from, to, mode });
       setRouteData(route);
     } catch (err) {
       setRouteData(null);
@@ -33,6 +33,7 @@ const Home = () => {
         isLoading={isLoadingRoute}
         error={routeError}
       />
+
       <MapCard
         routeData={routeData}
         isLoading={isLoadingRoute}
