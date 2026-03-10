@@ -15,13 +15,15 @@ const Home = () => {
   const [weatherError, setWeatherError] = useState("");
 
   const handleRouteSubmit = async ({ from, to }) => {
+    let route = null;
+
     setIsLoadingRoute(true);
     setRouteError("");
     setWeatherError("");
     setWeatherData(null);
 
     try {
-      const route = await fetchRoute({ from, to });
+      route = await fetchRoute({ from, to });
       setRouteData(route);
 
       if (route?.endLocation?.lat != null && route?.endLocation?.lng != null) {
@@ -40,8 +42,33 @@ const Home = () => {
     } catch (err) {
       setRouteData(null);
       setRouteError(err.message || "Could not fetch route.");
+      setWeatherData(null);
+      setWeatherError("");
+      setIsLoadingWeather(false);
+      return;
     } finally {
       setIsLoadingRoute(false);
+    }
+
+    const lat = route?.startLocation?.lat;
+    const lng = route?.startLocation?.lng;
+    if (lat == null || lng == null) {
+      setWeatherData(null);
+      setWeatherError("Route has no start location for weather lookup.");
+      return;
+    }
+
+    setWeatherError("");
+    setIsLoadingWeather(true);
+
+    try {
+      const weather = await getWeather({ lat, lng });
+      setWeatherData(weather);
+    } catch (weatherErr) {
+      setWeatherData(null);
+      setWeatherError(weatherErr.message || "Could not fetch weather.");
+    } finally {
+      setIsLoadingWeather(false);
     }
   };
 
