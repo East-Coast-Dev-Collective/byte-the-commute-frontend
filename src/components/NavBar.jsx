@@ -1,26 +1,30 @@
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
+import { logoTickerItems } from "../data/logoTickerItems";
 
 const Navbar = () => {
+  const scrollingItems = [...logoTickerItems, ...logoTickerItems];
+
   return (
     <nav className="navbar">
-      <div className="navbar__left">
-        <div className="navbar__brand">
-          <img
-            src={logo}
-            alt="Byte The Commute Logo"
-            className="navbar__logo"
-          />
-
-          <NavLink to="/" className="navbar__title">
-            Byte The Commute
-          </NavLink>
+      <div className="navbar__ticker" aria-hidden="true">
+        <div className="ticker-track">
+          {scrollingItems.map((item, idx) => (
+            <span className="ticker-item" key={`${item.label}-${idx}`}>
+              <img src={item.src} alt="" loading="lazy" />
+              <span>{item.label}</span>
+            </span>
+          ))}
         </div>
       </div>
 
-      <div className="navbar__right">
-        <div className="navbar__profile" />
-      </div>
+      <NavLink to="/" className="navbar__brand" aria-label="Byte The Commute home">
+        <img
+          src={logo}
+          alt="Byte The Commute Logo"
+          className="navbar__logo"
+        />
+      </NavLink>
     </nav>
   );
 };

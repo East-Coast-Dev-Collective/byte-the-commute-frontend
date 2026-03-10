@@ -131,32 +131,43 @@ const MapCard = ({ routeData, isLoading, error }) => {
   }, [routeData]);
 
   return (
-    <section>
-      <h3>Route</h3>
-      <div
-        ref={mapContainerRef}
-        style={{
-          width: "100%",
-          height: "320px",
-          borderRadius: "8px",
-          marginBottom: "12px",
-          background: "#e5e7eb",
-        }}
-      />
+    <section className="card map-card">
+      <div className="card__head">
+        <h3>Live Route Map</h3>
+        <p>Centered and updated with your latest route.</p>
+      </div>
+      <div ref={mapContainerRef} className="map-canvas" />
       {isLoading && <p>Loading route...</p>}
       {!isLoading && error && <p className="error-text">{error}</p>}
       {!isLoading && !error && mapError && <p className="error-text">{mapError}</p>}
       {!isLoading && !error && routeData && (
-        <>
-          <p>
+        <div className="route-stats">
+          <p className="route-stats__trip">
             {routeData.from} to {routeData.to}
           </p>
-          <p>Mode: {routeData.mode}</p>
-          <p>Distance: {routeData.distanceText ?? "N/A"}</p>
-          <p>Duration: {routeData.durationText ?? "N/A"}</p>
-        </>
+          <div className="route-stat">
+            <span className="route-stat__label">Mode</span>
+            <span className="route-stat__value route-stat__value--mode">
+              {routeData.mode ?? "N/A"}
+            </span>
+          </div>
+          <div className="route-stat">
+            <span className="route-stat__label">Distance</span>
+            <span className="route-stat__value">
+              {routeData.distanceText ?? "N/A"}
+            </span>
+          </div>
+          <div className="route-stat">
+            <span className="route-stat__label">Duration</span>
+            <span className="route-stat__value">
+              {routeData.durationText ?? "N/A"}
+            </span>
+          </div>
+        </div>
       )}
-      {!isLoading && !error && !routeData && <p>Search for a route to begin.</p>}
+      {!isLoading && !error && !routeData && (
+        <p className="empty-text">Search for a route to begin.</p>
+      )}
     </section>
   );
 };
