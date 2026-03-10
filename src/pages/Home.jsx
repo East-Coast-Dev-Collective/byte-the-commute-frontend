@@ -14,26 +14,6 @@ const Home = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [weatherError, setWeatherError] = useState("");
 
-  /* DEBUG HELPER:
-      Uncomment `await runWeatherDebugTest(); return;` inside handleRouteSubmit
-      to test weather without depending on the route API
-  */
-  const runWeatherDebugTest = async () => {
-    try {
-      const weather = await getWeather({
-        lat: 41.8781, //Chicago
-        lng: -87.6298,
-      });
-
-      setWeatherData(weather);
-      console.log("DEBUG weather from backend:", weather);
-    } catch (err) {
-      setWeatherData(weather);
-      setWeatherError(err.message || "Could not fetch weather.");
-      console.error("DEBUG weather test failed.", err);
-    }
-  };
-
   const handleRouteSubmit = async ({ from, to }) => {
     setIsLoadingRoute(true);
     setRouteError("");
@@ -41,11 +21,6 @@ const Home = () => {
     setWeatherData(null);
 
     try {
-      //DEBUG:
-      // Uncomment the next 2 lines to test weather without route working.
-      // await runWeatherDebugTest();
-      // return;
-
       const route = await fetchRoute({ from, to });
       setRouteData(route);
 
@@ -55,7 +30,7 @@ const Home = () => {
             lat: route.endLocation.lat,
             lng: route.endLocation.lng,
           });
-          setWeatherData(null);
+          setWeatherData(weather);
           console.log("weather from backend:", weather);
         } catch (err) {
           setWeatherData(null);
@@ -83,7 +58,7 @@ const Home = () => {
         isLoading={isLoadingRoute}
         error={routeError}
       />
-      <WeatherCard />
+      <WeatherCard weatherData={weatherData} error={weatherError} />
     </div>
   );
 };
