@@ -14,9 +14,18 @@ const loadMapsSdk = (apiKey) => {
   mapsSdkPromise = new Promise((resolve, reject) => {
     const existingScript = document.getElementById("google-maps-js-sdk");
     if (existingScript) {
-      existingScript.addEventListener("load", () => resolve(window.google));
-      existingScript.addEventListener("error", () =>
-        reject(new Error("Failed to load Google Maps JS SDK.")),
+      if (existingScript.dataset.loaded === "true" && window.google?.maps) {
+        resolve(window.google);
+        return;
+      }
+
+      existingScript.addEventListener("load", () => resolve(window.google), {
+        once: true,
+      });
+      existingScript.addEventListener(
+        "error",
+        () => reject(new Error("Failed to load Google Maps JS SDK.")),
+        { once: true },
       );
       return;
     }
@@ -28,7 +37,10 @@ const loadMapsSdk = (apiKey) => {
     script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(
       apiKey,
     )}&libraries=geometry`;
-    script.onload = () => resolve(window.google);
+    script.onload = () => {
+      script.dataset.loaded = "true";
+      resolve(window.google);
+    };
     script.onerror = () =>
       reject(new Error("Failed to load Google Maps JS SDK."));
 
