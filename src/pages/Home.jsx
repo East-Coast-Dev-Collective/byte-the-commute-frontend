@@ -10,10 +10,12 @@ const Home = () => {
   const [routeData, setRouteData] = useState(null);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [routeError, setRouteError] = useState("");
+
+
   const [weatherData, setWeatherData] = useState(null);
   const [weatherError, setWeatherError] = useState("");
 
-  const handleRouteSubmit = async ({ from, to }) => {
+  const handleRouteSubmit = async ({ from, to, mode }) => {
     let route = null;
 
     setIsLoadingRoute(true);
@@ -22,7 +24,9 @@ const Home = () => {
     setWeatherData(null);
 
     try {
-      route = await fetchRoute({ from, to });
+
+      route = await fetchRoute({ from, to, mode });
+
       setRouteData(route);
     } catch (err) {
       setRouteData(null);
@@ -61,6 +65,7 @@ const Home = () => {
         isLoading={isLoadingRoute}
         error={routeError}
       />
+
       <MapCard
         routeData={routeData}
         isLoading={isLoadingRoute}
