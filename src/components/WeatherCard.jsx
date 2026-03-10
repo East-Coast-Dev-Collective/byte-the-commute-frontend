@@ -1,21 +1,15 @@
-const WeatherCard = ({ weatherData, isLoading, error }) => {
+const WeatherCard = ({ weatherData, error }) => {
   return (
     <section>
       <h3>Weather</h3>
-      {isLoading && <p>Loading weather...</p>}
-      {!isLoading && error && <p className="error-text">{error}</p>}
-      {!isLoading && !error && weatherData && (
+      {error && <p className="error-text">{error}</p>}
+      {!error && weatherData && (
         <>
-          <p>
-            Temperature:{" "}
-            {weatherData.temperature != null
-              ? `${Math.round(weatherData.temperature)}°F`
-              : "N/A"}
-          </p>
+          <p>Temperature: {weatherData.temperature ?? "N/A"} F</p>
           <p>Condition: {weatherData.condition ?? "N/A"}</p>
-          {weatherData.iconUrl && (
+          {weatherData.icon && (
             <img
-              src={weatherData.iconUrl}
+              src={`https://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
               alt={weatherData.condition ?? "Weather icon"}
               width="64"
               height="64"
@@ -23,7 +17,7 @@ const WeatherCard = ({ weatherData, isLoading, error }) => {
           )}
         </>
       )}
-      {!isLoading && !error && !weatherData && <p>Search for a route to load weather.</p>}
+      {!error && !weatherData && <p>Search for a route to load weather.</p>}
     </section>
   );
 };

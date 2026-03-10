@@ -12,7 +12,6 @@ const Home = () => {
   const [routeError, setRouteError] = useState("");
 
   const [weatherData, setWeatherData] = useState(null);
-  const [isLoadingWeather, setIsLoadingWeather] = useState(false);
   const [weatherError, setWeatherError] = useState("");
 
   const handleRouteSubmit = async ({ from, to }) => {
@@ -20,10 +19,26 @@ const Home = () => {
 
     setIsLoadingRoute(true);
     setRouteError("");
+    setWeatherError("");
+    setWeatherData(null);
 
     try {
       route = await fetchRoute({ from, to });
       setRouteData(route);
+
+      if (route?.endLocation?.lat != null && route?.endLocation?.lng != null) {
+        try {
+          const weather = await getWeather({
+            lat: route.endLocation.lat,
+            lng: route.endLocation.lng,
+          });
+          setWeatherData(weather);
+          console.log("weather from backend:", weather);
+        } catch (err) {
+          setWeatherData(null);
+          setWeatherError(err.message || "Could not fetch weather.");
+        }
+      }
     } catch (err) {
       setRouteData(null);
       setRouteError(err.message || "Could not fetch route.");
@@ -70,11 +85,7 @@ const Home = () => {
         isLoading={isLoadingRoute}
         error={routeError}
       />
-      <WeatherCard
-        weatherData={weatherData}
-        isLoading={isLoadingWeather}
-        error={weatherError}
-      />
+      <WeatherCard weatherData={weatherData} error={weatherError} />
     </div>
   );
 };
