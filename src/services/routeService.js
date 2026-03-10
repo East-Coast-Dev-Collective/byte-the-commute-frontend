@@ -22,9 +22,7 @@ export const fetchRoute = async ({ from, to, mode = "drive" }) => {
 
   if (!response.ok) {
     throw new Error(
-      data?.message ||
-        data?.message ||
-        `Route request failed (${response.status})`,
+      data?.message || `Route request failed (${response.status})`,
     );
   }
 
