@@ -20,7 +20,11 @@ const TransitDetailsCard = ({ mode, transitSteps, isLoading, error }) => {
       {!isLoading && !error && isTransit && hasSteps && (
         <ol className="transit-steps">
           {transitSteps.map((step, index) => {
-            const isWalking = step.travelMode === "walk";
+            const mode = String(step.travelMode ?? "").toLowerCase();
+            const isWalking = mode === "walk" || mode === "walking";
+            const instruction = String(
+              step.instruction || "No instruction available.",
+            ).replace(/<[^>]*>/g, "");
 
             return (
               <li
@@ -32,10 +36,13 @@ const TransitDetailsCard = ({ mode, transitSteps, isLoading, error }) => {
                     {index + 1}. {isWalking ? "Walk" : "Transit"}
                   </strong>
                 </p>
-                <p>{step.instruction || "No instruction available."}</p>
+                <p>{instruction}</p>
 
                 {isWalking ? (
-                  <p>Distance: {step.distanceText ?? "N/A"}</p>
+                  <>
+                    <p>Distance: {step.distanceText ?? "N/A"}</p>
+                    <p>Duration: {step.durationText ?? "N/A"}</p>
+                  </>
                 ) : (
                   <>
                     <p>Line: {step.line ?? "N/A"}</p>
