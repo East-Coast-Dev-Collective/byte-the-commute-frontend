@@ -30,9 +30,16 @@ const FromToCard = ({ onRouteSubmit, isLoading = false, error = "" }) => {
   ];
 
   return (
-    <form className="card" onSubmit={handleSubmit}>
-      <label>From</label>
+    <form className="card route-card" onSubmit={handleSubmit}>
+      <div className="card__head">
+        <h3>Plan Commute</h3>
+        <p>Live route intelligence in one tap.</p>
+      </div>
+
+      <label htmlFor="route-from">From</label>
       <input
+        id="route-from"
+        className="input-field"
         type="text"
         placeholder="Start Location"
         value={from}
@@ -40,8 +47,10 @@ const FromToCard = ({ onRouteSubmit, isLoading = false, error = "" }) => {
         onChange={(e) => setFrom(e.target.value)}
       />
 
-      <label>To</label>
+      <label htmlFor="route-to">To</label>
       <input
+        id="route-to"
+        className="input-field"
         type="text"
         placeholder="Destination"
         value={to}
@@ -49,7 +58,6 @@ const FromToCard = ({ onRouteSubmit, isLoading = false, error = "" }) => {
         onChange={(e) => setTo(e.target.value)}
       />
 
-      {/* Mode Selector */}
       <div className="mode-row" aria-label="Transport mode">
         {modes.map((m) => (
           <button
