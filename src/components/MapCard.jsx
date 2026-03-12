@@ -56,6 +56,9 @@ const MapCard = ({ routeData, isLoading, error }) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const routePolylineRef = useRef(null);
+  const startMarkerRef = useRef(null);
+  const endMarkerRef = useRef(null);
+  const mapListenersRef = useRef([]);
 
   useEffect(() => {
     let isDisposed = false;
@@ -102,18 +105,39 @@ const MapCard = ({ routeData, isLoading, error }) => {
       routePolylineRef.current = null;
     }
 
-    if (!routeData?.polyline) {
+    if (startMarkerRef.current) {
+      startMarkerRef.current.setMap(null);
+      startMarkerRef.current = null;
+    }
+
+    if (endMarkerRef.current) {
+      endMarkerRef.current.setMap(null);
+      endMarkerRef.current = null;
+    }
+
+    mapListenersRef.current.forEach((listener) => listener.remove());
+    mapListenersRef.current = [];
+
+    if (isLoading || error || !routeData?.polyline) {
       return;
     }
 
     const startLat = Number(routeData?.startLocation?.lat);
     const startLng = Number(routeData?.startLocation?.lng);
-    if (Number.isNaN(startLat) || Number.isNaN(startLng)) {
+    const endLat = Number(routeData?.endLocation?.lat);
+    const endLng = Number(routeData?.endLocation?.lng);
+    if (
+      Number.isNaN(startLat) ||
+      Number.isNaN(startLng) ||
+      Number.isNaN(endLat) ||
+      Number.isNaN(endLng)
+    ) {
       return;
     }
 
-    const decodedPath =
-      window.google.maps.geometry.encoding.decodePath(routeData.polyline);
+    const decodedPath = window.google.maps.geometry.encoding.decodePath(
+      routeData.polyline,
+    );
     if (!decodedPath.length) {
       return;
     }
@@ -128,18 +152,89 @@ const MapCard = ({ routeData, isLoading, error }) => {
       strokeWeight: 5,
       map: mapRef.current,
     });
-  }, [routeData]);
+
+    startMarkerRef.current = new window.google.maps.Marker({
+      position: { lat: startLat, lng: startLng },
+      map: mapRef.current,
+      title: "Start",
+      label: "A",
+    });
+
+    endMarkerRef.current = new window.google.maps.Marker({
+      position: { lat: endLat, lng: endLng },
+      map: mapRef.current,
+      title: "End",
+      label: "B",
+    });
+
+    const bounds = new window.google.maps.LatLngBounds();
+
+    decodedPath.forEach((point) => bounds.extend(point));
+    bounds.extend({ lat: startLat, lng: startLng });
+    bounds.extend({ lat: endLat, lng: endLng });
+
+    mapRef.current.fitBounds(bounds);
+
+    const boundsListener = window.google.maps.event.addListenerOnce(
+      mapRef.current,
+      "bounds_changed",
+      () => {
+        const zoom = mapRef.current.getZoom();
+
+        if (zoom > 15) {
+          mapRef.current.setZoom(15);
+        }
+      },
+    );
+
+    mapListenersRef.current.push(boundsListener);
+  }, [routeData, isLoading, error]);
+
+  useEffect(() => {
+    return () => {
+      if (routePolylineRef.current) {
+        routePolylineRef.current.setMap(null);
+        routePolylineRef.current = null;
+      }
+
+      if (startMarkerRef.current) {
+        startMarkerRef.current.setMap(null);
+        startMarkerRef.current = null;
+      }
+
+      if (endMarkerRef.current) {
+        endMarkerRef.current.setMap(null);
+        endMarkerRef.current = null;
+      }
+
+      mapListenersRef.current.forEach((listener) => listener.remove());
+      mapListenersRef.current = [];
+      mapRef.current = null;
+    };
+  }, []);
+
+  const showMap =
+    !isLoading && !error && !mapError && Boolean(routeData?.polyline);
 
   return (
-    <section className="card map-card">
-      <div className="card__head">
-        <h3>Live Route Map</h3>
-        <p>Centered and updated with your latest route.</p>
-      </div>
-      <div ref={mapContainerRef} className="map-canvas" />
+    <section>
+      <h3>Route</h3>
+      <div
+        ref={mapContainerRef}
+        style={{
+          width: "100%",
+          height: "320px",
+          borderRadius: "8px",
+          marginBottom: "12px",
+          background: "#e5e7eb",
+          display: showMap ? "block" : "none",
+        }}
+      />
       {isLoading && <p>Loading route...</p>}
       {!isLoading && error && <p className="error-text">{error}</p>}
-      {!isLoading && !error && mapError && <p className="error-text">{mapError}</p>}
+      {!isLoading && !error && mapError && (
+        <p className="error-text">{mapError}</p>
+      )}
       {!isLoading && !error && routeData && (
         <div className="route-stats">
           <p className="route-stats__trip">
@@ -168,6 +263,15 @@ const MapCard = ({ routeData, isLoading, error }) => {
       {!isLoading && !error && !routeData && (
         <p className="empty-text">Search for a route to begin.</p>
       )}
+      {!isLoading && !error && !routeData && (
+        <p>Search for a route to begin.</p>
+      )}
+
+      {!isLoading &&
+        !error &&
+        !mapError &&
+        routeData &&
+        !routeData.polyline && <p>No route data available.</p>}
     </section>
   );
 };
