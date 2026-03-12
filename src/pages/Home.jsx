@@ -2,6 +2,7 @@ import { useState } from "react";
 import NavBar from "../components/NavBar";
 import FromToCard from "../components/FromToCard";
 import MapCard from "../components/MapCard";
+import TransitDetailsCard from "../components/TransitDetailsCard";
 import WeatherCard from "../components/WeatherCard";
 import { fetchRoute } from "../services/routeService";
 import { getWeather } from "../services/weatherService";
@@ -68,6 +69,12 @@ const Home = () => {
 
       <MapCard
         routeData={routeData}
+        isLoading={isLoadingRoute}
+        error={routeError}
+      />
+      <TransitDetailsCard
+        mode={routeData?.mode}
+        transitSteps={routeData?.transitSteps}
         isLoading={isLoadingRoute}
         error={routeError}
       />
