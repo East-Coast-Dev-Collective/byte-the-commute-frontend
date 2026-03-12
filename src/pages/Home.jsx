@@ -6,11 +6,10 @@ import WeatherCard from "../components/WeatherCard";
 import { fetchRoute } from "../services/routeService";
 import { getWeather } from "../services/weatherService";
 
-const Home = () => {
+const Home = ({ user, onLogin, onLogout }) => {
   const [routeData, setRouteData] = useState(null);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [routeError, setRouteError] = useState("");
-
 
   const [weatherData, setWeatherData] = useState(null);
   const [weatherError, setWeatherError] = useState("");
@@ -24,7 +23,6 @@ const Home = () => {
     setWeatherData(null);
 
     try {
-
       route = await fetchRoute({ from, to, mode });
 
       setRouteData(route);
@@ -59,7 +57,7 @@ const Home = () => {
 
   return (
     <div>
-      <NavBar />
+      <NavBar user={user} onLogin={onLogin} onLogout={onLogout} />
       <FromToCard
         onRouteSubmit={handleRouteSubmit}
         isLoading={isLoadingRoute}
