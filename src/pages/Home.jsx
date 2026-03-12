@@ -24,7 +24,6 @@ const Home = ({ user, onLogin, onLogout }) => {
 
     try {
       route = await fetchRoute({ from, to, mode });
-
       setRouteData(route);
     } catch (err) {
       setRouteData(null);
@@ -48,7 +47,6 @@ const Home = ({ user, onLogin, onLogout }) => {
     try {
       const weather = await getWeather({ lat, lng });
       setWeatherData(weather);
-      console.log("weather from backend:", weather);
     } catch (err) {
       setWeatherData(null);
       setWeatherError(err.message || "Could not fetch weather.");
@@ -56,20 +54,24 @@ const Home = ({ user, onLogin, onLogout }) => {
   };
 
   return (
-    <div>
+    <div className="app-shell">
+      <div className="ambient ambient--one" aria-hidden="true" />
+      <div className="ambient ambient--two" aria-hidden="true" />
       <NavBar user={user} onLogin={onLogin} onLogout={onLogout} />
-      <FromToCard
-        onRouteSubmit={handleRouteSubmit}
-        isLoading={isLoadingRoute}
-        error={routeError}
-      />
+      <main className="home-layout">
+        <FromToCard
+          onRouteSubmit={handleRouteSubmit}
+          isLoading={isLoadingRoute}
+          error={routeError}
+        />
 
-      <MapCard
-        routeData={routeData}
-        isLoading={isLoadingRoute}
-        error={routeError}
-      />
-      <WeatherCard weatherData={weatherData} error={weatherError} />
+        <MapCard
+          routeData={routeData}
+          isLoading={isLoadingRoute}
+          error={routeError}
+        />
+        <WeatherCard weatherData={weatherData} error={weatherError} />
+      </main>
     </div>
   );
 };
