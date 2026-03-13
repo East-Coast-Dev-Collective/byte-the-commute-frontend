@@ -11,8 +11,6 @@ const Home = () => {
   const [routeData, setRouteData] = useState(null);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [routeError, setRouteError] = useState("");
-
-
   const [weatherData, setWeatherData] = useState(null);
   const [weatherError, setWeatherError] = useState("");
 
@@ -25,9 +23,7 @@ const Home = () => {
     setWeatherData(null);
 
     try {
-
       route = await fetchRoute({ from, to, mode });
-
       setRouteData(route);
     } catch (err) {
       setRouteData(null);
@@ -51,7 +47,6 @@ const Home = () => {
     try {
       const weather = await getWeather({ lat, lng });
       setWeatherData(weather);
-      console.log("weather from backend:", weather);
     } catch (err) {
       setWeatherData(null);
       setWeatherError(err.message || "Could not fetch weather.");
@@ -59,26 +54,29 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="app-shell">
+      <div className="ambient ambient--one" aria-hidden="true" />
+      <div className="ambient ambient--two" aria-hidden="true" />
       <NavBar />
-      <FromToCard
-        onRouteSubmit={handleRouteSubmit}
-        isLoading={isLoadingRoute}
-        error={routeError}
-      />
-
-      <MapCard
-        routeData={routeData}
-        isLoading={isLoadingRoute}
-        error={routeError}
-      />
-      <TransitDetailsCard
-        mode={routeData?.mode}
-        transitSteps={routeData?.transitSteps}
-        isLoading={isLoadingRoute}
-        error={routeError}
-      />
-      <WeatherCard weatherData={weatherData} error={weatherError} />
+      <main className="home-layout">
+        <FromToCard
+          onRouteSubmit={handleRouteSubmit}
+          isLoading={isLoadingRoute}
+          error={routeError}
+        />
+        <MapCard
+          routeData={routeData}
+          isLoading={isLoadingRoute}
+          error={routeError}
+        />
+        <TransitDetailsCard
+          mode={routeData?.mode}
+          transitSteps={routeData?.transitSteps}
+          isLoading={isLoadingRoute}
+          error={routeError}
+        />
+        <WeatherCard weatherData={weatherData} error={weatherError} />
+      </main>
     </div>
   );
 };
