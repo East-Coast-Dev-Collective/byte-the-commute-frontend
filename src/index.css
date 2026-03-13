@@ -39,7 +39,24 @@ body::before {
     linear-gradient(90deg, transparent 97%, rgba(255, 255, 255, 0.04) 100%);
   background-size: 28px 28px;
   pointer-events: none;
-  opacity: 0.2;
+  opacity: 0.08;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(6, 14, 26, 0.12),
+      rgba(6, 14, 26, 0.42)
+    ),
+    url("https://images.unsplash.com/photo-1641638083569-92ebb2762335?auto=format&fit=crop&fm=jpg&q=70&w=2400")
+      center / cover no-repeat;
+  opacity: 0.26;
+  mix-blend-mode: screen;
 }
 
 #root {
