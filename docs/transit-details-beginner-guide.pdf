@@ -1,0 +1,104 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2154 >>
+stream
+BT
+/F1 17 Tf
+50 760 Td
+(Beginner Guide: Show Bus and Train Details in Transit Routes) Tj
+/F1 11 Tf
+0 -15 Td
+(Goal) Tj
+0 -15 Td
+(When a user picks Transit mode, show if each step is bus, subway, commuter rail, etc.) Tj
+0 -10 Td
+0 -15 Td
+(What is happening now?) Tj
+0 -15 Td
+(Your app only shows summary route info \(distance/duration/polyline\).) Tj
+0 -15 Td
+(It does not return transit step details from Google Directions yet.) Tj
+0 -10 Td
+0 -15 Td
+(Step 1: Update backend /api/route response) Tj
+0 -15 Td
+(If mode is transit, loop through route.legs[0].steps and map each step.) Tj
+0 -15 Td
+(For transit steps, include: vehicleType, lineName/lineShortName, agency, headsign,) Tj
+0 -15 Td
+(departureStop, arrivalStop, departureTime, arrivalTime, numStops.) Tj
+0 -15 Td
+(Keep walking steps too so transfers are clear.) Tj
+0 -10 Td
+0 -15 Td
+(Step 2: Return transitSteps in frontend routeService) Tj
+0 -15 Td
+(In src/services/routeService.js, add transitSteps from backend into returned route object.) Tj
+0 -15 Td
+(Example: transitSteps: data?.transitSteps ?? []) Tj
+0 -10 Td
+0 -15 Td
+(Step 3: Render a Transit Itinerary UI) Tj
+0 -15 Td
+(In MapCard or a new TransitDetailsCard component:) Tj
+0 -15 Td
+(- If routeData.mode === transit, render a list of steps.) Tj
+0 -15 Td
+(- Show walking steps as "Walk X mins".) Tj
+0 -15 Td
+(- Show transit steps as "Bus 66", "Red Line", etc. with times and stops.) Tj
+0 -15 Td
+(- Show transfers in order.) Tj
+0 -10 Td
+0 -15 Td
+(Step 4: Add fallbacks and polish) Tj
+0 -15 Td
+(- If no transit steps, show "No transit details available".) Tj
+0 -15 Td
+(- Keep summary mode/distance/duration visible above the itinerary.) Tj
+0 -15 Td
+(- Add loading and error states.) Tj
+0 -10 Td
+0 -15 Td
+(Step 5: Test quickly) Tj
+0 -15 Td
+(1\) Search a transit route that needs at least one transfer.) Tj
+0 -15 Td
+(2\) Verify each transit leg shows type + line + stop names + time.) Tj
+0 -15 Td
+(3\) Verify walk segments appear between transit legs.) Tj
+0 -15 Td
+(4\) Verify non-transit modes still look normal.) Tj
+0 -10 Td
+0 -15 Td
+(Done) Tj
+0 -15 Td
+(After this, users can tell exactly which bus/train to take and where to transfer.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000002447 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2517
+%%EOF
