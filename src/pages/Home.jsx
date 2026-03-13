@@ -2,6 +2,7 @@ import { useState } from "react";
 import NavBar from "../components/NavBar";
 import FromToCard from "../components/FromToCard";
 import MapCard from "../components/MapCard";
+import AuthCard from "../components/AuthCard";
 import TransitDetailsCard from "../components/TransitDetailsCard";
 import WeatherCard from "../components/WeatherCard";
 import { fetchRoute } from "../services/routeService";
@@ -11,13 +12,16 @@ const Home = ({ user, onLogin, onRegister, onLogout }) => {
   const [routeData, setRouteData] = useState(null);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [routeError, setRouteError] = useState("");
+  const [hasSearchedRoute, setHasSearchedRoute] = useState(false);
 
   const [weatherData, setWeatherData] = useState(null);
   const [weatherError, setWeatherError] = useState("");
+  const showAuthCard = !user && !hasSearchedRoute;
 
   const handleRouteSubmit = async ({ from, to, mode }) => {
     let route = null;
 
+    setHasSearchedRoute(true);
     setIsLoadingRoute(true);
     setRouteError("");
     setWeatherError("");
@@ -58,30 +62,40 @@ const Home = ({ user, onLogin, onRegister, onLogout }) => {
     <div className="app-shell">
       <div className="ambient ambient--one" aria-hidden="true" />
       <div className="ambient ambient--two" aria-hidden="true" />
-      <NavBar
-        user={user}
-        onLogin={onLogin}
-        onRegister={onRegister}
-        onLogout={onLogout}
-      />
-      <main className="home-layout">
-        <FromToCard
-          onRouteSubmit={handleRouteSubmit}
-          isLoading={isLoadingRoute}
-          error={routeError}
-        />
-        <MapCard
-          routeData={routeData}
-          isLoading={isLoadingRoute}
-          error={routeError}
-        />
-        <TransitDetailsCard
-          mode={routeData?.mode}
-          transitSteps={routeData?.transitSteps}
-          isLoading={isLoadingRoute}
-          error={routeError}
-        />
-        <WeatherCard weatherData={weatherData} error={weatherError} />
+      <NavBar />
+      <main className={`home-layout ${showAuthCard ? "home-layout--guest" : ""}`}>
+        <div className="home-slot home-slot--form">
+          <FromToCard
+            onRouteSubmit={handleRouteSubmit}
+            isLoading={isLoadingRoute}
+            error={routeError}
+            user={user}
+            onLogout={onLogout}
+          />
+        </div>
+        {showAuthCard && (
+          <div className="home-slot home-slot--auth">
+            <AuthCard onLogin={onLogin} onRegister={onRegister} />
+          </div>
+        )}
+        <div className="home-slot home-slot--map">
+          <MapCard
+            routeData={routeData}
+            isLoading={isLoadingRoute}
+            error={routeError}
+          />
+        </div>
+        <div className="home-slot home-slot--transit">
+          <TransitDetailsCard
+            mode={routeData?.mode}
+            transitSteps={routeData?.transitSteps}
+            isLoading={isLoadingRoute}
+            error={routeError}
+          />
+        </div>
+        <div className="home-slot home-slot--weather">
+          <WeatherCard weatherData={weatherData} error={weatherError} />
+        </div>
       </main>
     </div>
   );

@@ -217,16 +217,12 @@ const MapCard = ({ routeData, isLoading, error }) => {
     !isLoading && !error && !mapError && Boolean(routeData?.polyline);
 
   return (
-    <section>
-      <h3>Route</h3>
+    <section className="card map-card">
+      {!routeData && <h3>Route</h3>}
       <div
+        className="map-canvas"
         ref={mapContainerRef}
         style={{
-          width: "100%",
-          height: "320px",
-          borderRadius: "8px",
-          marginBottom: "12px",
-          background: "#e5e7eb",
           display: showMap ? "block" : "none",
         }}
       />
@@ -262,9 +258,6 @@ const MapCard = ({ routeData, isLoading, error }) => {
       )}
       {!isLoading && !error && !routeData && (
         <p className="empty-text">Search for a route to begin.</p>
-      )}
-      {!isLoading && !error && !routeData && (
-        <p>Search for a route to begin.</p>
       )}
 
       {!isLoading &&
