@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-const FromToCard = ({ onRouteSubmit, isLoading = false, error = "" }) => {
+const FromToCard = ({
+  onRouteSubmit,
+  isLoading = false,
+  error = "",
+  user = null,
+  onLogout,
+}) => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [mode, setMode] = useState("drive");
@@ -31,6 +37,18 @@ const FromToCard = ({ onRouteSubmit, isLoading = false, error = "" }) => {
 
   return (
     <form className="card route-card" onSubmit={handleSubmit}>
+      <div className="route-card__greeting">
+        <p className="home-greeting">{user ? `Hello ${user.name}!` : "Hello Guest!"}</p>
+        {user && (
+          <button
+            type="button"
+            className="navbar__btn home-greeting__logout"
+            onClick={onLogout}
+          >
+            Logout
+          </button>
+        )}
+      </div>
       <div className="card__head">
         <h3>Plan Commute</h3>
         <p>Live route intelligence in one tap.</p>

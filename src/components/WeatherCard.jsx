@@ -3,7 +3,6 @@ const WeatherCard = ({ weatherData, error }) => {
     <section className="card weather-card">
       <div className="card__head">
         <h3>Destination Weather</h3>
-        <p>Conditions at your route endpoint.</p>
       </div>
       {error && <p className="error-text">{error}</p>}
       {!error && weatherData && (
