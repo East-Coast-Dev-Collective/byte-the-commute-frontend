@@ -6,7 +6,7 @@ import WeatherCard from "../components/WeatherCard";
 import { fetchRoute } from "../services/routeService";
 import { getWeather } from "../services/weatherService";
 
-const Home = ({ user, onLogin, onLogout }) => {
+const Home = ({ user, onLogin, onRegister, onLogout }) => {
   const [routeData, setRouteData] = useState(null);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [routeError, setRouteError] = useState("");
@@ -57,7 +57,12 @@ const Home = ({ user, onLogin, onLogout }) => {
     <div className="app-shell">
       <div className="ambient ambient--one" aria-hidden="true" />
       <div className="ambient ambient--two" aria-hidden="true" />
-      <NavBar user={user} onLogin={onLogin} onLogout={onLogout} />
+      <NavBar
+        user={user}
+        onLogin={onLogin}
+        onRegister={onRegister}
+        onLogout={onLogout}
+      />
       <main className="home-layout">
         <FromToCard
           onRouteSubmit={handleRouteSubmit}

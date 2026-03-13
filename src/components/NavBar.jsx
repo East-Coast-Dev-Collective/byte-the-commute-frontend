@@ -3,18 +3,34 @@ import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { logoTickerItems } from "../data/logoTickerItems";
 
-const Navbar = ({ user, onLogin, onLogout }) => {
+const Navbar = ({ user, onLogin, onRegister, onLogout }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
   const scrollingItems = [...logoTickerItems, ...logoTickerItems];
+
   const handleLoginClick = () => {
     if (!username.trim() || !password.trim()) {
       setAuthError("Please enter both username and password.");
       return;
     }
+
     setAuthError("");
     onLogin({
+      username,
+      password,
+    });
+    setUsername("");
+    setPassword("");
+  };
+
+  const handleRegisterClick = () => {
+    if (!username.trim() || !password.trim()) {
+      setAuthError("Please enter both username and password.");
+      return;
+    }
+    setAuthError("");
+    onRegister({
       username,
       password,
     });
@@ -72,6 +88,10 @@ const Navbar = ({ user, onLogin, onLogout }) => {
 
               <button className="navbar__btn" onClick={handleLoginClick}>
                 Login
+              </button>
+
+              <button className="navbar__btn" onClick={handleRegisterClick}>
+                Register
               </button>
 
               {authError && <span className="navbar__error">{authError}</span>}

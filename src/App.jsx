@@ -14,11 +14,26 @@ const App = () => {
     });
   };
 
+  const handleRegister = ({ username, password }) => {
+    if (!username.trim() || !password.trim()) {
+      return;
+    }
+    setUser({
+      name: username.trim(),
+    });
+  };
   const handleLogout = () => {
     setUser(null);
   };
 
-  return <Home user={user} onLogin={handleLogin} onLogout={handleLogout} />;
+  return (
+    <Home
+      user={user}
+      onLogin={handleLogin}
+      onRegister={handleRegister}
+      onLogout={handleLogout}
+    />
+  );
 };
 
 export default App;
