@@ -1,7 +1,39 @@
-import Home from './pages/Home'
+import { useState } from "react";
+import Home from "./pages/Home";
 
 const App = () => {
-  return <Home />
-}
+  const [user, setUser] = useState(null);
 
-export default App
+  const handleLogin = ({ username, password }) => {
+    if (!username.trim() || !password.trim()) {
+      return;
+    }
+
+    setUser({
+      name: username.trim(),
+    });
+  };
+
+  const handleRegister = ({ username, password }) => {
+    if (!username.trim() || !password.trim()) {
+      return;
+    }
+    setUser({
+      name: username.trim(),
+    });
+  };
+  const handleLogout = () => {
+    setUser(null);
+  };
+
+  return (
+    <Home
+      user={user}
+      onLogin={handleLogin}
+      onRegister={handleRegister}
+      onLogout={handleLogout}
+    />
+  );
+};
+
+export default App;
