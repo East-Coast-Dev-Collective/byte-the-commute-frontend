@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { logoTickerItems } from "../data/logoTickerItems";
 
-const Navbar = () => {
+const Navbar = ({ onHomeClick }) => {
   const scrollingItems = [...logoTickerItems, ...logoTickerItems];
 
   return (
@@ -22,6 +22,7 @@ const Navbar = () => {
         to="/"
         className="navbar__brand"
         aria-label="Byte The Commute home"
+        onClick={onHomeClick}
       >
         <img src={logo} alt="Byte The Commute Logo" className="navbar__logo" />
       </NavLink>
