@@ -74,7 +74,9 @@ const Home = ({ user, onLogin, onRegister, onLogout }) => {
       <div className="ambient ambient--one" aria-hidden="true" />
       <div className="ambient ambient--two" aria-hidden="true" />
       <NavBar onHomeClick={handleHomeReset} />
-      <main className={`home-layout ${showAuthCard ? "home-layout--guest" : ""}`}>
+      <main
+        className={`home-layout ${showAuthCard ? "home-layout--guest" : ""}`}
+      >
         <div className="home-slot home-slot--form">
           <FromToCard
             key={`route-form-${homeViewKey}`}
@@ -101,14 +103,16 @@ const Home = ({ user, onLogin, onRegister, onLogout }) => {
             error={routeError}
           />
         </div>
-        <div className="home-slot home-slot--transit">
-          <TransitDetailsCard
-            mode={routeData?.mode}
-            transitSteps={routeData?.transitSteps}
-            isLoading={isLoadingRoute}
-            error={routeError}
-          />
-        </div>
+        {routeData?.mode === "transit" && (
+          <div className="home-slot home-slot--transit">
+            <TransitDetailsCard
+              mode={routeData?.mode}
+              transitSteps={routeData?.transitSteps}
+              isLoading={isLoadingRoute}
+              error={routeError}
+            />
+          </div>
+        )}
         <div className="home-slot home-slot--weather">
           <WeatherCard weatherData={weatherData} error={weatherError} />
         </div>

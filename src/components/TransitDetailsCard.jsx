@@ -1,5 +1,8 @@
 const TransitDetailsCard = ({ mode, transitSteps, isLoading, error }) => {
   const isTransit = mode === "transit";
+
+  if (!isTransit) return null;
+
   const hasSteps = Array.isArray(transitSteps) && transitSteps.length > 0;
 
   return (
