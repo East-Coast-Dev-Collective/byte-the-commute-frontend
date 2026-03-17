@@ -1,5 +1,8 @@
 const TransitDetailsCard = ({ mode, transitSteps, isLoading, error }) => {
   const isTransit = mode === "transit";
+
+  if (!isTransit) return null;
+
   const hasSteps = Array.isArray(transitSteps) && transitSteps.length > 0;
 
   return (
@@ -12,17 +15,11 @@ const TransitDetailsCard = ({ mode, transitSteps, isLoading, error }) => {
       {isLoading && <p className="empty-text">Loading transit details...</p>}
       {!isLoading && error && <p className="error-text">{error}</p>}
 
-      {!isLoading && !error && !isTransit && (
-        <p className="empty-text">
-          Transit details appear when Transit mode is selected.
-        </p>
-      )}
-
-      {!isLoading && !error && isTransit && !hasSteps && (
+      {!isLoading && !error && !hasSteps && (
         <p className="empty-text">No transit details available.</p>
       )}
 
-      {!isLoading && !error && isTransit && hasSteps && (
+      {!isLoading && !error && hasSteps && (
         <ol className="transit-steps">
           {transitSteps.map((step, index) => {
             const mode = String(step.travelMode ?? "").toLowerCase();
@@ -42,6 +39,7 @@ const TransitDetailsCard = ({ mode, transitSteps, isLoading, error }) => {
                     {isWalking ? "Walk" : "Transit"}
                   </span>
                 </div>
+
                 <p className="transit-step__instruction">{instruction}</p>
 
                 {isWalking ? (
