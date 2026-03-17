@@ -9,6 +9,7 @@ import { fetchRoute } from "../services/routeService";
 import { getWeather } from "../services/weatherService";
 
 const Home = ({ user, onLogin, onRegister, onLogout }) => {
+  const [homeViewKey, setHomeViewKey] = useState(0);
   const [routeData, setRouteData] = useState(null);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [routeError, setRouteError] = useState("");
@@ -17,6 +18,16 @@ const Home = ({ user, onLogin, onRegister, onLogout }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [weatherError, setWeatherError] = useState("");
   const showAuthCard = !user && !hasSearchedRoute;
+
+  const handleHomeReset = () => {
+    setHomeViewKey((currentKey) => currentKey + 1);
+    setRouteData(null);
+    setIsLoadingRoute(false);
+    setRouteError("");
+    setHasSearchedRoute(false);
+    setWeatherData(null);
+    setWeatherError("");
+  };
 
   const handleRouteSubmit = async ({ from, to, mode }) => {
     let route = null;
@@ -62,10 +73,11 @@ const Home = ({ user, onLogin, onRegister, onLogout }) => {
     <div className="app-shell">
       <div className="ambient ambient--one" aria-hidden="true" />
       <div className="ambient ambient--two" aria-hidden="true" />
-      <NavBar />
+      <NavBar onHomeClick={handleHomeReset} />
       <main className={`home-layout ${showAuthCard ? "home-layout--guest" : ""}`}>
         <div className="home-slot home-slot--form">
           <FromToCard
+            key={`route-form-${homeViewKey}`}
             onRouteSubmit={handleRouteSubmit}
             isLoading={isLoadingRoute}
             error={routeError}
@@ -75,7 +87,11 @@ const Home = ({ user, onLogin, onRegister, onLogout }) => {
         </div>
         {showAuthCard && (
           <div className="home-slot home-slot--auth">
-            <AuthCard onLogin={onLogin} onRegister={onRegister} />
+            <AuthCard
+              key={`auth-card-${homeViewKey}`}
+              onLogin={onLogin}
+              onRegister={onRegister}
+            />
           </div>
         )}
         <div className="home-slot home-slot--map">
