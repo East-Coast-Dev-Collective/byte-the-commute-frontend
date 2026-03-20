@@ -18,7 +18,7 @@ This is a placeholder setup flow for local development.
 1. Clone the repo down using the command: `git clone <url-from-green-code-button-above>`
 3. Run `npm install`
 4. You can test out the site by running: `npm run dev`
-5. Using your web browser, navigate to `http:localhost:5173` and you should be able to see content.
+5. Using your web browser, navigate to `http://localhost:5173` and you should be able to see content.
 
 Some features are still placeholder and not fully implemented yet, but these are the expected local run steps.
 
